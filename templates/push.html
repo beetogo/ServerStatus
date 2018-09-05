@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>服务器状态监控</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <h4 class="mt-3">PUSH数据测试
+        <small>SocketIO状态：<span class="badge badge-pill badge-secondary" id="socketio-status">未连接</span></small>
+    </h4>
+
+    <div class="form-group">
+        <label for="uuid">uuid</label>
+        <input type="text" class="form-control" id="uuid" placeholder="uuid"
+               value="1dd454c7-42b0-4059-a2b4-cd16f0ac9085">
+    </div>
+    <div class="form-group">
+        <label for="cpu_precent">cpu_precent</label>
+        <input type="text" class="form-control" id="cpu_precent" placeholder="cpu_precent" value="0">
+    </div>
+    <div class="form-group">
+        <label for="memory">memory</label>
+        <input type="text" class="form-control" id="memory" placeholder="memory" value="0">
+    </div>
+    <div class="form-group">
+        <label for="memory_all">memory_all</label>
+        <input type="text" class="form-control" id="memory_all" placeholder="memory_all" value="0">
+    </div>
+    <div class="form-group">
+        <label for="update_time">update_time</label>
+        <input type="text" class="form-control" id="update_time" placeholder="update_time" value="0">
+    </div>
+    <div class="form-group">
+        <label for="uptime">uptime</label>
+        <input type="text" class="form-control" id="uptime" placeholder="uptime" value="0">
+    </div>
+    <div class="form-group">
+        <label for="load">load</label>
+        <input type="text" class="form-control" id="load" placeholder="load" value="0">
+    </div>
+    <div class="form-group">
+        <label for="network_in">network_in</label>
+        <input type="text" class="form-control" id="network_in" placeholder="network_in" value="0">
+    </div>
+    <div class="form-group">
+        <label for="network_out">network_out</label>
+        <input type="text" class="form-control" id="network_out" placeholder="network_out" value="0">
+    </div>
+    <div class="form-group">
+        <label for="traffic_in">traffic_in</label>
+        <input type="text" class="form-control" id="traffic_in" placeholder="traffic_in" value="0">
+    </div>
+    <div class="form-group">
+        <label for="traffic_out">traffic_out</label>
+        <input type="text" class="form-control" id="traffic_out" placeholder="traffic_out" value="0">
+    </div>
+    <div class="form-group">
+        <label for="hdd">hdd</label>
+        <input type="text" class="form-control" id="hdd" placeholder="hdd" value="0">
+    </div>
+    <div class="form-group">
+        <label for="hdd_all">hdd_all</label>
+        <input type="text" class="form-control" id="hdd_all" placeholder="hdd_all" value="0">
+    </div>
+    <div class="form-group">
+        <label for="token">token</label>
+        <input type="text" class="form-control" id="token" placeholder="token" value="123456">
+    </div>
+
+    <button class="btn btn-dark" id="push">发送</button>
+    <pre><code id="return-info"></code></pre>
+</div>
+
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+<script>
+    const socketio = io.connect('/info');
+    socketio.on('connect', () => {
+        $('#socketio-status').addClass('badge-success').removeClass('badge-secondary').text('已连接');
+    });
+    socketio.on('disconnect', () => {
+        $('#socketio-status').addClass('badge-secondary').removeClass('badge-success').text('未连接');
+    });
+    socketio.on('message', data => {
+        console.log(data);
+    });
+    socketio.on('server_push', data => {
+        $('#return-info').text(JSON.stringify(data));
+    });
+    $('#push').click(function () {
+        if (!socketio.connected) {
+            return;
+        }
+        let data = {
+            'uuid': $('#uuid').val(),
+            'cpu_precent': $('#cpu_precent').val(),
+            'memory': $('#memory').val(),
+            'memory_all': $('#memory_all').val(),
+            'update_time': new Date().getTime(),
+            'uptime': $('#uptime').val(),
+            'load': $('#load').val(),
+            'network_in': $('#network_in').val(),
+            'network_out': $('#network_out').val(),
+            'traffic_in': $('#traffic_in').val(),
+            'traffic_out': $('#traffic_out').val(),
+            'hdd': $('#hdd').val(),
+            'hdd_all': $('#hdd_all').val(),
+            'token': $('#token').val()
+        };
+        socketio.emit('server_push', data);
+    });
+</script>
+
+</body>
+</html>

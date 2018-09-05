@@ -1,0 +1,367 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>服务器状态监控</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <h4 class="mt-3">
+        服务器状态监控
+        <small>SocketIO状态：<span class="badge badge-pill badge-success" id="socketio-status">已连接</span></small>
+    </h4>
+    <div class="cards">
+        <div class="card">
+        <table class="table table-striped" id="server-info">
+
+            <tbody>
+            <tr>
+                <th>节点名</th>
+                <td>测试</td>
+            </tr>
+            <tr>
+                <th>更新于</th>
+                <td>2018-09-05 09:26:57</td>
+            </tr>
+            <tr>
+
+                <th>在线</th>
+                <td>0天9小时47分钟</td>
+            </tr>
+            <tr>
+                <th>网络 ↓|↑</th>
+                <td>601 B/s / 601 B/s</td>
+            </tr>
+            <tr>
+
+                <th>网络 All</th>
+                <td>1.17 KiB/s</td>
+            </tr>
+            <tr>
+                <th>流量 ↓|↑</th>
+                <td>29.86 MiB / 31.41 MiB</td>
+            </tr>
+            <tr>
+
+                <th>流量 All</th>
+                <td>61.28 MiB</td>
+            </tr>
+            <tr>
+                <td>负载</td>
+                <td>(0.0, 0.0, 0.0)</td>
+            </tr>
+            <tr>
+                <td>CPU</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated  text-black-50" style="width: 0%">
+                            0%
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>RAM</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info text-black-50" style="width: 30.31%">
+                            30.31% (146.05 MiB / 481.89 MiB)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>DISK</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success text-black-50" style="width: 12.46%">
+                            12.46% (2.45 GiB / 19.66 GiB)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+       <div class="card">
+        <table class="table table-striped" id="server-info">
+
+            <tbody>
+            <tr>
+                <th>节点名</th>
+                <td>测试</td>
+            </tr>
+            <tr>
+                <th>更新于</th>
+                <td>2018-09-05 09:26:57</td>
+            </tr>
+            <tr>
+
+                <th>在线</th>
+                <td>0天9小时47分钟</td>
+            </tr>
+            <tr>
+                <th>网络 ↓|↑</th>
+                <td>601 B/s / 601 B/s</td>
+            </tr>
+            <tr>
+
+                <th>网络 All</th>
+                <td>1.17 KiB/s</td>
+            </tr>
+            <tr>
+                <th>流量 ↓|↑</th>
+                <td>29.86 MiB / 31.41 MiB</td>
+            </tr>
+            <tr>
+
+                <th>流量 All</th>
+                <td>61.28 MiB</td>
+            </tr>
+            <tr>
+                <td>负载</td>
+                <td>(0.0, 0.0, 0.0)</td>
+            </tr>
+            <tr>
+                <td>CPU</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated  text-black-50" style="width: 0%">
+                            0%
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>RAM</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info text-black-50" style="width: 30.31%">
+                            30.31% (146.05 MiB / 481.89 MiB)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>DISK</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success text-black-50" style="width: 12.46%">
+                            12.46% (2.45 GiB / 19.66 GiB)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+<script>
+    function formatDuring(mss) {
+        let days = parseInt(mss / (1000 * 60 * 60 * 24));
+        let hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+        return days + "天" + hours + "小时" + minutes + "分钟";
+    }
+
+    function getProgessColor(percent) {
+        if (percent <= 10) {
+            return '';
+        } else if (percent <= 25) {
+            return 'bg-success';
+        } else if (percent <= 50) {
+            return 'bg-info';
+        } else if (percent < 100) {
+            return 'bg-warning';
+        } else if (percent >= 100) {
+            return 'bg-danger';
+        }
+    }
+
+    function bytesToSize(bytes, precision, si) {
+        let ret;
+        si = typeof si !== 'undefined' ? si : 0;
+        let kilobyte = 1000;
+        let megabyte = kilobyte * 1000;
+        let gigabyte = megabyte * 1000;
+        let terabyte = gigabyte * 1000;
+        if (si !== 0) {
+            kilobyte = 1000;
+            megabyte = kilobyte * 1000;
+            gigabyte = megabyte * 1000;
+            terabyte = gigabyte * 1000;
+        } else {
+            kilobyte = 1024;
+            megabyte = kilobyte * 1024;
+            gigabyte = megabyte * 1024;
+            terabyte = gigabyte * 1024;
+        }
+
+        if ((bytes >= 0) && (bytes < kilobyte)) {
+            return bytes + ' B';
+
+        } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+            ret = (bytes / kilobyte).toFixed(precision) + ' K';
+
+        } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+            ret = (bytes / megabyte).toFixed(precision) + ' M';
+
+        } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+            ret = (bytes / gigabyte).toFixed(precision) + ' G';
+
+        } else if (bytes >= terabyte) {
+            ret = (bytes / terabyte).toFixed(precision) + ' T';
+
+        } else {
+            return bytes + ' B';
+        }
+        if (si !== 0) {
+            return ret + 'B';
+        } else {
+            return ret + 'iB';
+        }
+    }
+
+    Date.prototype.pattern = function (fmt) {
+        let o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        let week = {
+            "0": "/u65e5",
+            "1": "/u4e00",
+            "2": "/u4e8c",
+            "3": "/u4e09",
+            "4": "/u56db",
+            "5": "/u4e94",
+            "6": "/u516d"
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+        }
+        for (let k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    };
+
+    const socketio = io.connect('/info');
+    let update_timer;
+    socketio.on('connect', () => {
+        $('#socketio-status').addClass('badge-success').removeClass('badge-secondary').text('已连接');
+        update_timer = setInterval(function () {
+            socketio.emit('info_update');
+        }, {{interval}});
+    });
+    socketio.on('disconnect', () => {
+        $('#socketio-status').addClass('badge-secondary').removeClass('badge-success').text('未连接');
+        clearInterval(update_timer);
+    });
+    socketio.on('message', data => {
+        console.log(data);
+    });
+    socketio.on('info_update', data => {
+        $('.cards').html('');
+        $.each(data, (index, element) => {
+
+            let view = [];
+            // 时间转换
+            let date = new Date(element['update_time']);
+            view['update_time'] = date.pattern('yyyy-MM-dd hh:mm:ss');
+            view['uptime'] = formatDuring(element['uptime']);
+            // 网络信息转换
+            view['network_all'] = element['network_in'] + element['network_out'];
+            view['network_in'] = bytesToSize(element['network_in'], 2);
+            view['network_out'] = bytesToSize(element['network_out'], 2);
+            view['network_all'] = bytesToSize(view['network_all'], 2);
+            view['traffic_all'] = element['traffic_in'] + element['traffic_out'];
+            view['traffic_in'] = bytesToSize(element['traffic_in'], 2);
+            view['traffic_out'] = bytesToSize(element['traffic_out'], 2);
+            view['traffic_all'] = bytesToSize(view['traffic_all'], 2);
+            // 获取CPU进度条颜色
+            view['cpu_class'] = getProgessColor(element['cpu_precent']);
+            // 获取内存进度条颜色
+            view['memory_percent'] = (element['memory'] / element['memory_all'] * 100).toFixed(2);
+            view['memory_class'] = getProgessColor(view['memory_percent']);
+            // 内存数据转换
+            view['memory'] = bytesToSize(element['memory'], 2);
+            view['memory_all'] = bytesToSize(element['memory_all'], 2);
+            // 获取硬盘进度条颜色
+            view['hdd_percent'] = (element['hdd'] / element['hdd_all'] * 100).toFixed(2);
+            view['hdd_class'] = getProgessColor(view['hdd_percent']);
+            // 硬盘数据转换
+            view['hdd'] = bytesToSize(element['hdd'], 2);
+            view['hdd_all'] = bytesToSize(element['hdd_all'], 2);
+            // language=HTML
+            $('.cards').append(`<div class="card">
+        <table class="table table-striped" id="server-info">
+            <tbody>
+            <tr><th>节点名</th><td>${element['name']}</td></tr>
+            <tr><th>更新于</th><td>${view['update_time']}</td></tr>
+            <tr><th>在线</th><td>${view['uptime']}</td></tr>
+            <tr><th>网络 ↓|↑</th><td>${view['network_in']}/s / ${view['network_out']}/s</td></tr>
+            <tr><th>网络 All</th><td>${view['network_all']}/s</td></tr>
+            <tr><th>流量 ↓|↑</th><td>${view['traffic_in']} / ${view['traffic_out']}</td></tr>
+            <tr><th>流量 All</th><td>${view['traffic_all']}</td></tr>
+            <tr><td>负载</td><td>${element['load']}</td></tr>
+            <tr><td>CPU</td><td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated  ${view['cpu_class']} text-black-50" style="width: ${view['cpu_precent']}%">
+                            ${element['cpu_precent']}%
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr><td>RAM</td><td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated ${view['memory_class']} text-black-50" style="width: ${view['memory_percent']}%">
+                            ${view['memory_percent']}% (${view['memory']} / ${view['memory_all']})
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr><td>DISK</td><td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated ${view['hdd_class']} text-black-50" style="width: ${view['hdd_percent']}%">
+                            ${view['hdd_percent']}% (${view['hdd']} / ${view['hdd_all']})
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>`)
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+[Unit]
+Description=ServerStatus
+After=rc-local.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/var/ServerStatus
+ExecStart=/usr/bin/pipenv run gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -c guni.conf  -w 1 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
